@@ -1,0 +1,106 @@
+package com.example.lexdiff.parse;
+
+import com.example.lexdiff.domain.DocumentMetadata;
+import com.example.lexdiff.domain.LegalDocument;
+import com.example.lexdiff.domain.NodeType;
+import com.example.lexdiff.domain.Provision;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
+
+/**
+ * A heuristic, regex-driven parser that segments a plain-text legal document
+ * into an ordered list of typed Provisions.
+ *
+ * <p>The parser scans the raw text line by line. Any line that matches one of
+ * the patterns in the supplied {@link SegmentationProfile} is treated as a
+ * provision heading and starts a new provision block. All subsequent non-blank
+ * lines until the next heading are accumulated as the provision's body text.
+ * Lines appearing before the first recognized heading are skipped (preamble /
+ * title block).
+ *
+ * <p>Canonical internal identifiers are assigned as "{type}-{zero-padded-index}"
+ * (e.g., {@code article-0001}) and are independent of the visible label, so
+ * renumbered provisions still receive a distinct, stable internal handle within
+ * the parsed version.
+ */
+public class RegexDocumentParser implements DocumentParser {
+
+    @Override
+    public LegalDocument parse(String rawText, DocumentMetadata metadata, SegmentationProfile profile) {
+        Map<Pattern, NodeType> patternTypeMap = buildPatternMap(profile);
+
+        List<Provision> provisions = new ArrayList<>();
+        String[] lines = rawText.split("\r?\n", -1);
+
+        String currentLabel = null;
+        NodeType currentType = null;
+        List<String> bodyLines = new ArrayList<>();
+        int provisionIndex = 0;
+
+        for (String rawLine : lines) {
+            String line = rawLine.strip();
+            NodeType matched = firstMatch(line, patternTypeMap);
+
+            if (matched != null) {
+                if (currentLabel != null) {
+                    provisions.add(buildProvision(provisionIndex++, currentLabel, currentType, bodyLines));
+                }
+                currentLabel = line;
+                currentType = matched;
+                bodyLines = new ArrayList<>();
+            } else if (currentLabel != null && !line.isEmpty()) {
+                bodyLines.add(line);
+            }
+            // lines before the first heading are intentionally ignored
+        }
+
+        // flush the last open provision
+        if (currentLabel != null) {
+            provisions.add(buildProvision(provisionIndex, currentLabel, currentType, bodyLines));
+        }
+
+        if (provisions.isEmpty()) {
+            throw new IllegalArgumentException(
+                    "No provisions found in document '" + metadata.title() + "'. " +
+                    "Check that the SegmentationProfile patterns match the document's headings.");
+        }
+
+        return new LegalDocument(metadata, Collections.unmodifiableList(provisions));
+    }
+
+    // --- helpers ---
+
+    private Map<Pattern, NodeType> buildPatternMap(SegmentationProfile profile) {
+        Map<Pattern, NodeType> map = new LinkedHashMap<>();
+        addPattern(map, profile.articleRegex(),   NodeType.ARTICLE);
+        addPattern(map, profile.sectionRegex(),   NodeType.SECTION);
+        addPattern(map, profile.paragraphRegex(), NodeType.PARAGRAPH);
+        return map;
+    }
+
+    private void addPattern(Map<Pattern, NodeType> map, String regex, NodeType type) {
+        if (regex != null && !regex.isBlank()) {
+            map.put(Pattern.compile(regex), type);
+        }
+    }
+
+    private NodeType firstMatch(String line, Map<Pattern, NodeType> patternTypeMap) {
+        for (Map.Entry<Pattern, NodeType> entry : patternTypeMap.entrySet()) {
+            if (entry.getKey().matcher(line).find()) {
+                return entry.getValue();
+            }
+        }
+        return null;
+    }
+
+    private Provision buildProvision(int index, String label, NodeType type, List<String> bodyLines) {
+        String id   = type.name().toLowerCase() + "-" + String.format("%04d", index);
+        String text = String.join(" ", bodyLines).strip();
+        return new Provision(id, label, type, text);
+    }
+}
