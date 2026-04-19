@@ -5,12 +5,16 @@ import com.example.lexdiff.domain.LegalDocument;
 import com.example.lexdiff.domain.NodeType;
 import com.example.lexdiff.domain.Provision;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * A heuristic, regex-driven parser that segments a plain-text legal document
@@ -29,6 +33,8 @@ import java.util.regex.Pattern;
  * the parsed version.
  */
 public class RegexDocumentParser implements DocumentParser {
+
+    private static final Logger log = LoggerFactory.getLogger(RegexDocumentParser.class);
 
     @Override
     public LegalDocument parse(String rawText, DocumentMetadata metadata, SegmentationProfile profile) {
@@ -69,6 +75,16 @@ public class RegexDocumentParser implements DocumentParser {
                     "No provisions found in document '" + metadata.title() + "'. " +
                     "Check that the SegmentationProfile patterns match the document's headings.");
         }
+
+        provisions.stream()
+                .collect(Collectors.groupingBy(Provision::label, Collectors.counting()))
+                .forEach((label, count) -> {
+                    if (count > 1) {
+                        log.warn("Duplicate label '{}' found {} times in '{}'. " +
+                                "Label-based cross-version matching may be unreliable for this provision.",
+                                label, count, metadata.title());
+                    }
+                });
 
         return new LegalDocument(metadata, Collections.unmodifiableList(provisions));
     }
