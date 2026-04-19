@@ -27,7 +27,7 @@ public class WordTokenizer implements Tokenizer {
 
     // Matches a word (possibly hyphenated) OR a single punctuation character.
     private static final Pattern TOKEN_PATTERN =
-            Pattern.compile("\\w+(?:-\\w+)*|[^\\w\\s]");
+            Pattern.compile("\\w+(?:-\\w+)*|[^\\w\\s]", Pattern.UNICODE_CHARACTER_CLASS);
 
     @Override
     public List<Token> tokenize(String text) {
