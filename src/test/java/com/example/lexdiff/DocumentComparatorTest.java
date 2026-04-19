@@ -126,6 +126,25 @@ class DocumentComparatorTest {
     }
 
     @Test
+    void renumberedProvisionIncludesEvidenceSnippets() {
+        String text = "The minister shall publish an annual report on expenditures within the budget.";
+        Provision pA = new Provision("article-0000", "Article 3", NodeType.ARTICLE, text);
+        Provision pB = new Provision("article-0001", "Article 5", NodeType.ARTICLE, text);
+        LegalDocument a = new LegalDocument(metaA, List.of(pA));
+        LegalDocument b = new LegalDocument(metaB, List.of(pB));
+
+        AmendmentReport report = comparator.compare(a, b);
+
+        ChangeOperation op = report.operations().stream()
+                .filter(o -> o.type() == ChangeType.RENUMBER_PROVISION)
+                .findFirst()
+                .orElseThrow();
+        assertFalse(op.evidenceSnippets().isEmpty(), "Renumber operation should carry before/after evidence");
+        assertTrue(op.evidenceSnippets().stream().anyMatch(s -> s.startsWith("before:")));
+        assertTrue(op.evidenceSnippets().stream().anyMatch(s -> s.startsWith("after:")));
+    }
+
+    @Test
     void reportMetadataReflectsSourceDocuments() {
         LegalDocument a = new LegalDocument(metaA, List.of());
         LegalDocument b = new LegalDocument(metaB, List.of());
