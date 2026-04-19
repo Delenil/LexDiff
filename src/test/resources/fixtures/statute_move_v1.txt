@@ -1,0 +1,14 @@
+Statute on Data Protection
+Version A
+
+Article 1
+All personal data shall be collected and processed only with the explicit consent of the data subject.
+
+Article 2
+The controller shall implement appropriate technical and organisational measures to ensure data security.
+
+Article 3
+Data subjects shall have the right to request erasure of their personal data within thirty days of the request.
+
+Article 4
+Any breach of personal data security must be reported to the supervisory authority within seventy-two hours.
