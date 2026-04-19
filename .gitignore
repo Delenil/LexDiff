@@ -37,6 +37,7 @@ out/
 .vscode/
 
 ### Project-specific ###
-*.txt
 *.pdf
 ~$*
+*.txt
+!src/test/resources/**/*.txt
