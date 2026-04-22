@@ -1,0 +1,81 @@
+Bulgarian statutes - OLD STATES ONLY
+Prepared: 2026-04-14
+
+Purpose:
+This file contains the pre-amendment / old-state side of the paired corpus.
+It is aligned by section and target with the revised file so you can run a diff.
+
+Important:
+- This is a starter corpus, not a complete legislative history.
+- Where the amendment inserted a brand-new article or paragraph, the old state is marked as ABSENT.
+- No missing old text has been invented.
+
+============================================================
+1) ЗАКОН ЗА ЗАДЪЛЖЕНИЯТА И ДОГОВОРИТЕ (ЗЗД)
+============================================================
+ORIGINAL_STATUTE:
+Закон за задълженията и договорите
+Original promulgation: ДВ, бр. 275 от 22.11.1950 г.
+
+SELECTED_REVISION_FOR_ALIGNMENT:
+Закон за допълнение на Закона за задълженията и договорите
+Adopted: 20.11.2020
+State Gazette: ДВ, бр. 102/2020
+Target: чл. 112
+
+OLD_STATE:
+[ABSENT]
+Before the 2020 supplement, чл. 112 did not exist in the statute.
+
+============================================================
+2) КОДЕКС НА ТРУДА (КТ)
+============================================================
+ORIGINAL_STATUTE:
+Кодекс на труда
+Original promulgation: ДВ, бр. 26 и 27 от 1986 г.
+
+SELECTED_REVISION_FOR_ALIGNMENT:
+Закон за изменение и допълнение на Кодекса на труда
+Adopted: 02.07.2015
+State Gazette: ДВ, бр. 54/2015
+Target: чл. 128б
+
+OLD_STATE:
+[ABSENT]
+Before this amendment, чл. 128б did not exist in the code.
+
+============================================================
+3A) НАКАЗАТЕЛЕН КОДЕКС (НК) - REVISION A
+============================================================
+ORIGINAL_STATUTE:
+Наказателен кодекс
+Original promulgation: ДВ, бр. 26 от 1968 г.
+
+SELECTED_REVISION_FOR_ALIGNMENT:
+Закон за допълнение на Наказателния кодекс
+Adopted: 22.02.2012
+State Gazette: ДВ, бр. 19/2012
+Target: чл. 227
+
+OLD_STATE:
+[ABSENT]
+Before this 2012 supplement, чл. 227 did not exist in the code.
+
+============================================================
+3B) НАКАЗАТЕЛЕН КОДЕКС (НК) - REVISION B
+============================================================
+ORIGINAL_STATUTE:
+Наказателен кодекс
+Original promulgation: ДВ, бр. 26 от 1968 г.
+
+SELECTED_REVISION_FOR_ALIGNMENT:
+Закон за изменение и допълнение на Наказателния кодекс
+Adopted: 17.09.2015
+State Gazette: ДВ, бр. 74/2015
+Target: чл. 16а, ал. 2
+
+OLD_STATE:
+[ABSENT]
+Before this 2015 amendment, чл. 16а had no ал. 2.
+
+END OF FILE

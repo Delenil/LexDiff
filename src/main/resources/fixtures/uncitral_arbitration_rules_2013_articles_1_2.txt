@@ -1,0 +1,27 @@
+Article 1
+
+1. Where parties have agreed that disputes between them in respect of a defined legal relationship, whether contractual or not, shall be referred to arbitration under the UNCITRAL Arbitration Rules, then such disputes shall be settled in accordance with these Rules subject to such modification as the parties may agree.
+
+2. The parties to an arbitration agreement concluded after 15 August 2010 shall be presumed to have referred to the Rules in effect on the date of commencement of the arbitration, unless the parties have agreed to apply a particular version of the Rules. That presumption does not apply where the arbitration agreement has been concluded by accepting after 15 August 2010 an offer made before that date.
+
+3. These Rules shall govern the arbitration except that where any of these Rules is in conflict with a provision of the law applicable to the arbitration from which the parties cannot derogate, that provision shall prevail.
+
+4. For investor-State arbitration initiated pursuant to a treaty providing for the protection of investments or investors, these Rules include the UNCITRAL Rules on Transparency in Treaty-based Investor-State Arbitration (“Rules on Transparency”), subject to article 1 of the Rules on Transparency.
+
+Article 2
+
+1. A notice, including a notification, communication or proposal, may be transmitted by any means of communication that provides or allows for a record of its transmission.
+
+2. If an address has been designated by a party specifically for this purpose or authorized by the arbitral tribunal, any notice shall be delivered to that party at that address, and if so delivered shall be deemed to have been received. Delivery by electronic means such as facsimile or e-mail may only be made to an address so designated or authorized.
+
+3. In the absence of such designation or authorization, a notice is:
+
+(a) Received if it is physically delivered to the addressee; or
+
+(b) Deemed to have been received if it is delivered at the place of business, habitual residence or mailing address of the addressee.
+
+4. If, after reasonable efforts, delivery cannot be effected in accordance with paragraphs 2 or 3, a notice is deemed to have been received if it is sent to the addressee’s last-known place of business, habitual residence or mailing address by registered letter or any other means that provides a record of delivery or of attempted delivery.
+
+5. A notice shall be deemed to have been received on the day it is delivered in accordance with paragraphs 2, 3 or 4, or attempted to be delivered in accordance with paragraph 4. A notice transmitted by electronic means is deemed to have been received on the day it is sent, except that a notice of arbitration so transmitted is only deemed to have been received on the day when it reaches the addressee’s electronic address.
+
+6. For the purpose of calculating a period of time under these Rules, such period shall begin to run on the day following the day when a notice is received. If the last day of such period is an official holiday or a non-business day at the residence or place of business of the addressee, the period is extended until the first business day which follows. Official holidays or non-business days occurring during the running of the period of time are included in calculating the period.

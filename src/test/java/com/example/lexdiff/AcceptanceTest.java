@@ -15,7 +15,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-// Acceptance tests covering each scenario from Table 2 of the thesis using real fixture files.
+// Acceptance tests covering the core comparison scenarios using real fixture files.
 class AcceptanceTest {
 
     private static final SegmentationProfile PROFILE =
