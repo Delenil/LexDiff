@@ -15,13 +15,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * Acceptance tests that verify each scenario from Table 2 of the thesis.
- *
- * <p>Each test loads real fixture files, runs the full pipeline, and asserts
- * that the amendment report reflects a specific editorial operation that a
- * human reader would also identify in the source texts.
- */
+// Acceptance tests covering each scenario from Table 2 of the thesis using real fixture files.
 class AcceptanceTest {
 
     private static final SegmentationProfile PROFILE =
@@ -30,11 +24,7 @@ class AcceptanceTest {
     private final FileDocumentLoader  loader = new FileDocumentLoader();
     private final RegexDocumentParser parser = new RegexDocumentParser();
 
-    // -----------------------------------------------------------------------
-    // Scenario 1: new article inserted (statute_v3 → statute_v4)
-    //   Article 6 in v4 ("All judgments must be published…") is wholly new —
-    //   no provision in v3 is similar enough to be a move match.
-    // -----------------------------------------------------------------------
+    // Scenario 1: wholly new article in v4 should be ADD_PROVISION, not a spurious move match.
     @Test
     void insertedArticleIsReportedAsAddProvision() {
         AmendmentReport report = compare("statute_v3", "statute_v4");
@@ -44,11 +34,7 @@ class AcceptanceTest {
         assertTrue(hasAdd, "Expected ADD_PROVISION for newly inserted Article 6");
     }
 
-    // -----------------------------------------------------------------------
-    // Scenario 2: renumbered article with unchanged wording (statute_v3 → statute_v4)
-    //   Article 4 in v3 ("judge may dismiss…") reappears as Article 5 in v4
-    //   with the same text — should be RENUMBER, not DELETE+ADD.
-    // -----------------------------------------------------------------------
+    // Scenario 2: same-text article renumbered (v3→v4) should be RENUMBER_PROVISION, not DELETE+ADD.
     @Test
     void renumberedArticleIsNotReportedAsDeletePlusAdd() {
         AmendmentReport report = compare("statute_v3", "statute_v4");
@@ -79,12 +65,7 @@ class AcceptanceTest {
                 "Confidence must be in [0, 1]");
     }
 
-    // -----------------------------------------------------------------------
-    // Scenario 3: provision moved + lightly edited (statute_move_v1 → statute_move_v2)
-    //   Article 4 "breach" → Article 5 with "of discovery" added  → MOVE_PROVISION
-    //   Article 3 "erasure" → Article 6 identical text            → RENUMBER_PROVISION
-    //   Article 2 "controller measures" → Article 7 with extended text → MOVE_PROVISION
-    // -----------------------------------------------------------------------
+    // Scenario 3: relocated provisions (statute_move_v1→v2) should appear as MOVE or RENUMBER, not DELETE+ADD.
     @Test
     void movedAndEditedProvisionIsReportedAsMoveNotDeletePlusAdd() {
         AmendmentReport report = compare("statute_move_v1", "statute_move_v2");
@@ -120,10 +101,7 @@ class AcceptanceTest {
                 "Move/renumber operation should carry before/after evidence snippets"));
     }
 
-    // -----------------------------------------------------------------------
-    // Scenario 4: provision text revised in place (statute_v1 → statute_v2)
-    //   Article 5 "fourteen days" → "twenty-one days"
-    // -----------------------------------------------------------------------
+    // Scenario 4: in-place text change (v1→v2: "fourteen" → "twenty-one") should produce MODIFY_PROVISION with evidence.
     @Test
     void modifiedProvisionIsReportedWithTokenLevelEvidence() {
         AmendmentReport report = compare("statute_v1", "statute_v2");
@@ -137,9 +115,7 @@ class AcceptanceTest {
                 "MODIFY_PROVISION must include token-level evidence snippets");
     }
 
-    // -----------------------------------------------------------------------
-    // Scenario 5: malformed / unmatched heading pattern → no silent empty report
-    // -----------------------------------------------------------------------
+    // Scenario 5: wrong segmentation profile should throw a clear exception, not silently return an empty report.
     @Test
     void missingSegmentationProfileThrowsWithClearMessage() {
         SegmentationProfile wrongProfile = new SegmentationProfile("^§\\s+\\d+", null, null);
@@ -153,10 +129,7 @@ class AcceptanceTest {
                 "Exception message should identify the problem clearly");
     }
 
-    // -----------------------------------------------------------------------
-    // Multi-version: three-version chain (v3 → v4 via intermediate parse)
-    //   Verifies pairwise comparison produces distinct, non-empty reports.
-    // -----------------------------------------------------------------------
+    // Multi-version: chaining three versions should produce two distinct, non-empty pairwise reports.
     @Test
     void threeVersionChainProducesTwoDistinctReports() {
         LegalDocument docV1 = load("statute_v1", "v1");
@@ -173,10 +146,6 @@ class AcceptanceTest {
         assertNotEquals(r1.fromVersion(), r2.fromVersion(),
                 "Each pairwise report must reference its own source version");
     }
-
-    // -----------------------------------------------------------------------
-    // Helpers
-    // -----------------------------------------------------------------------
 
     private AmendmentReport compare(String fixtureA, String fixtureB) {
         return new DocumentComparator().compare(load(fixtureA, "vA"), load(fixtureB, "vB"));

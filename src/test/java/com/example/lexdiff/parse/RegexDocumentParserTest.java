@@ -31,9 +31,7 @@ class RegexDocumentParserTest {
         metadata = new DocumentMetadata("Test Statute", "TEST", "v1", LocalDate.of(2026, 1, 10));
     }
 
-    // -----------------------------------------------------------------------
-    // Basic parsing
-    // -----------------------------------------------------------------------
+    // basic parsing
 
     @Test
     void parsesCorrectNumberOfProvisions() {
@@ -98,9 +96,7 @@ class RegexDocumentParserTest {
         assertThat(p.type()).isEqualTo(NodeType.ARTICLE);
     }
 
-    // -----------------------------------------------------------------------
-    // Canonical IDs
-    // -----------------------------------------------------------------------
+    // canonical IDs
 
     @Test
     void assignsCanonicalIdsWithTypePrefix() {
@@ -135,9 +131,7 @@ class RegexDocumentParserTest {
         assertThat(provisions.get(1).id()).isEqualTo("article-0001");
     }
 
-    // -----------------------------------------------------------------------
-    // Preamble and blank lines
-    // -----------------------------------------------------------------------
+    // preamble and blank lines
 
     @Test
     void ignoresLinesBeforeFirstHeading() {
@@ -185,9 +179,7 @@ class RegexDocumentParserTest {
         assertThat(first.text()).isEmpty();
     }
 
-    // -----------------------------------------------------------------------
-    // Mixed node types
-    // -----------------------------------------------------------------------
+    // mixed node types
 
     @Test
     void assignsCorrectNodeTypesForMixedProfile() {
@@ -224,9 +216,7 @@ class RegexDocumentParserTest {
         assertThat(provisions.get(1).id()).isEqualTo("article-0001");
     }
 
-    // -----------------------------------------------------------------------
-    // Profile edge cases
-    // -----------------------------------------------------------------------
+    // profile edge cases
 
     @Test
     void nullAndBlankRegexesAreIgnored() {
@@ -252,9 +242,7 @@ class RegexDocumentParserTest {
                 .withMessageContaining("No provisions found");
     }
 
-    // -----------------------------------------------------------------------
-    // Metadata is preserved
-    // -----------------------------------------------------------------------
+    // metadata passthrough
 
     @Test
     void metadataIsPreservedInDocument() {
@@ -268,9 +256,7 @@ class RegexDocumentParserTest {
         assertThat(doc.metadata()).isEqualTo(metadata);
     }
 
-    // -----------------------------------------------------------------------
-    // Fixture files (smoke test for FileDocumentLoader integration)
-    // -----------------------------------------------------------------------
+    // fixture files
 
     @Test
     void parsesV1FixtureCorrectly() {

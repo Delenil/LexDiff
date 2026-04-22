@@ -40,15 +40,10 @@ public class MyersDiffAlgorithm implements DiffAlgorithm {
         }
 
         int max = n + m;
-        // v[k + max] = furthest x-coordinate reached on diagonal k.
-        // Initialised to 0: the algorithm treats the virtual start as (0, 1) on
-        // diagonal k=1 (i.e. before any real move), which is consistent with using
-        // v[k+1] = 0 as the starting x when we move down on diagonal k = k+1 - 1.
+        // v[k+max] = furthest x-coordinate on diagonal k; offset by max to allow negative k.
         int[] v = new int[2 * max + 1];
 
-        // trace[d] = snapshot of v[] saved at the start of edit-distance round d.
-        // We need this snapshot during backtracking to reconstruct which branch was
-        // chosen at each step.
+        // snapshot of v[] per edit-distance step, needed to reconstruct the path during backtracking
         List<int[]> trace = new ArrayList<>();
 
         outer:
@@ -57,14 +52,11 @@ public class MyersDiffAlgorithm implements DiffAlgorithm {
 
             for (int k = -d; k <= d; k += 2) {
                 int x;
-                // Choose the better predecessor diagonal.
-                // If k == -d we can only come from diagonal k+1 (a down / insert move).
-                // If k ==  d we can only come from diagonal k-1 (a right / delete move).
-                // Otherwise pick whichever diagonal reached furthest.
+                // move down (insert) from k+1, or right (delete) from k-1; prefer whichever advanced furthest
                 if (k == -d || (k != d && v[k - 1 + max] < v[k + 1 + max])) {
-                    x = v[k + 1 + max];       // down move: x stays, y advances → insert
+                    x = v[k + 1 + max];       // insert: x stays, y advances
                 } else {
-                    x = v[k - 1 + max] + 1;   // right move: x advances → delete
+                    x = v[k - 1 + max] + 1;   // delete: x advances
                 }
 
                 int y = x - k;
@@ -88,14 +80,7 @@ public class MyersDiffAlgorithm implements DiffAlgorithm {
 
     // --- backtracking ----------------------------------------------------------
 
-    /**
-     * Reconstructs the edit script by walking backwards through the forward trace.
-     *
-     * <p>At each edit-distance step d, the algorithm re-determines which diagonal
-     * the path came from (using the same decision rule as the forward pass but
-     * applied to the saved snapshot), emits EQUAL edits for the snake, then emits
-     * the single INSERT or DELETE that preceded the snake.
-     */
+    // Walks the forward trace in reverse to reconstruct which moves were taken at each step.
     private EditScript backtrack(List<int[]> trace, List<Token> a, List<Token> b, int max) {
         List<Edit> edits = new ArrayList<>();
         int x = a.size();
@@ -113,16 +98,8 @@ public class MyersDiffAlgorithm implements DiffAlgorithm {
             }
 
             int prevX = v[prevK + max];
-            int prevY = prevX - prevK;
 
-            // The snake for this round runs from (snakeStartX, snakeStartY) to (x, y).
-            // snakeStart is one step past the non-diagonal move:
-            //   insert → snakeStartX = prevX,     snakeStartY = prevY + 1
-            //   delete → snakeStartX = prevX + 1, snakeStartY = prevY
-            // In both cases snakeStartX > prevX iff it was a delete, so we can use
-            // just x > prevX (for delete) or y > prevY + 1 → x > prevX (same thing
-            // on diagonal k).  A simpler unified condition: the snake length equals
-            // x - prevX - (prevK == k - 1 ? 1 : 0).
+            // snake length from (prevX, prevY) to (x, y), minus the one non-diagonal move
             int snakeLen = x - prevX - (prevK == k - 1 ? 1 : 0);
             for (int i = 0; i < snakeLen; i++) {
                 edits.add(new Edit(EditType.EQUAL, a.get(x - 1), b.get(y - 1)));
@@ -130,17 +107,13 @@ public class MyersDiffAlgorithm implements DiffAlgorithm {
                 y--;
             }
 
-            // Emit the single non-diagonal move.
             if (prevK == k + 1) {
-                // Insert: b[y-1] was inserted (y advances, x stays).
-                edits.add(new Edit(EditType.INSERT, null, b.get(y - 1)));
+                edits.add(new Edit(EditType.INSERT, null, b.get(y - 1))); // insert b[y-1]
                 y--;
             } else {
-                // Delete: a[x-1] was deleted (x advances, y stays).
-                edits.add(new Edit(EditType.DELETE, a.get(x - 1), null));
+                edits.add(new Edit(EditType.DELETE, a.get(x - 1), null)); // delete a[x-1]
                 x--;
             }
-            // Invariant after the step: (x, y) == (prevX, prevY).
         }
 
         // d == 0: any remaining tokens form the initial common prefix (all EQUAL).

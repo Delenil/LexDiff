@@ -16,26 +16,11 @@ import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-/**
- * A heuristic, regex-driven parser that segments a plain-text legal document
- * into an ordered list of typed Provisions.
- *
- * <p>The parser scans the raw text line by line. Any line that matches one of
- * the patterns in the supplied {@link SegmentationProfile} is treated as a
- * provision heading and starts a new provision block. All subsequent non-blank
- * lines until the next heading are accumulated as the provision's body text.
- * Lines appearing before the first recognized heading are skipped (preamble /
- * title block).
- *
- * <p>Canonical internal identifiers are assigned as "{type}-{zero-padded-index}"
- * (e.g., {@code article-0001}) and are independent of the visible label, so
- * renumbered provisions still receive a distinct, stable internal handle within
- * the parsed version.
- */
 public class RegexDocumentParser implements DocumentParser {
 
     private static final Logger log = LoggerFactory.getLogger(RegexDocumentParser.class);
 
+    // Scans line-by-line: heading lines start a new provision; body lines accumulate until the next heading.
     @Override
     public LegalDocument parse(String rawText, DocumentMetadata metadata, SegmentationProfile profile) {
         Map<Pattern, NodeType> patternTypeMap = buildPatternMap(profile);

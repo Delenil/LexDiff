@@ -30,6 +30,7 @@ public class ShingleFingerprinter implements Fingerprinter<Provision> {
         this.k = k;
     }
 
+    // Produces a set of k-word shingles from the provision's word tokens (punctuation stripped, lowercased).
     @Override
     public ShingleSet fingerprint(Provision provision) {
         List<String> tokens = tokenizer.tokenize(provision.text())

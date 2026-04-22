@@ -26,6 +26,7 @@ public class FingerprintMoveDetector implements MoveDetector {
         this.threshold     = threshold;
     }
 
+    // Greedy best-match: each deleted provision is paired with its most similar inserted counterpart above threshold.
     @Override
     public List<MoveMatch> detect(List<Provision> deleted, List<Provision> inserted) {
         List<MoveMatch> matches = new ArrayList<>();
@@ -33,6 +34,7 @@ public class FingerprintMoveDetector implements MoveDetector {
         List<ShingleSet> deletedPrints  = deleted.stream().map(fingerprinter::fingerprint).toList();
         List<ShingleSet> insertedPrints = inserted.stream().map(fingerprinter::fingerprint).toList();
 
+        // prevents the same inserted provision from being claimed by two deleted ones
         boolean[] usedInserted = new boolean[inserted.size()];
 
         for (int d = 0; d < deleted.size(); d++) {

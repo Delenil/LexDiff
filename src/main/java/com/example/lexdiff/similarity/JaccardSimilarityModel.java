@@ -5,6 +5,7 @@ import java.util.Set;
 
 public class JaccardSimilarityModel implements SimilarityModel<ShingleSet> {
 
+    // Returns |A ∩ B| / |A ∪ B|; both-empty scores 1.0, one-empty scores 0.0.
     @Override
     public double similarity(ShingleSet a, ShingleSet b) {
         if (a.shingles().isEmpty() && b.shingles().isEmpty()) {

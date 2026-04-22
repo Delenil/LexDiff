@@ -134,10 +134,12 @@ class SimilarityTest {
         assertTrue(score < 0.2, "Expected low similarity for unrelated provisions, got: " + score);
     }
 
+    // convenience builder for test provisions
     private Provision provision(String id, String text) {
         return new Provision(id, "Label " + id, NodeType.ARTICLE, text);
     }
 
+    // convenience builder for pre-built shingle sets (bypasses fingerprinting)
     private ShingleSet shingleSet(String id, String... shingles) {
         return new ShingleSet(id, Set.of(shingles));
     }

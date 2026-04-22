@@ -196,6 +196,7 @@ class PerformanceBenchmarkTest {
         System.out.printf("Avg total time          : %.3f ms%n", parseMs + compareMs);
     }
 
+    // generates a random token list drawn from VOCAB
     private List<Token> syntheticTokens(int count, long seed) {
         Random rng = new Random(seed);
         List<Token> tokens = new ArrayList<>(count);
@@ -203,6 +204,7 @@ class PerformanceBenchmarkTest {
         return tokens;
     }
 
+    // replaces a random fraction of tokens with new random vocab words
     private List<Token> editedTokens(List<Token> base, double fraction, long seed) {
         Random rng = new Random(seed);
         List<Token> result = new ArrayList<>(base);
@@ -211,6 +213,7 @@ class PerformanceBenchmarkTest {
         return result;
     }
 
+    // generates provisions with random vocab text for move-detection benchmarks
     private List<Provision> syntheticProvisions(int count, String versionTag, long seed) {
         Random rng = new Random(seed);
         List<Provision> provisions = new ArrayList<>(count);
@@ -222,6 +225,7 @@ class PerformanceBenchmarkTest {
         return provisions;
     }
 
+    // lightly edits each provision's text to simulate moved-but-modified provisions
     private List<Provision> editedProvisions(List<Provision> base, double editFraction, String versionTag) {
         Random rng = new Random(99);
         List<Provision> result = new ArrayList<>(base.size());
@@ -232,6 +236,7 @@ class PerformanceBenchmarkTest {
         return result;
     }
 
+    // builds a synthetic document with random-text provisions for full-pipeline benchmarks
     private LegalDocument syntheticDocument(int provisionCount, int wordsEach, String version) {
         Random rng = new Random(version.hashCode());
         DocumentMetadata meta = new DocumentMetadata("Synthetic Statute", "TEST", version, LocalDate.of(2025, 1, 1));
@@ -244,6 +249,7 @@ class PerformanceBenchmarkTest {
         return new LegalDocument(meta, provisions);
     }
 
+    // produces an amended version of a document with a fraction of provisions modified and a fraction label-swapped
     private LegalDocument amendedDocument(LegalDocument base, double modifyFraction, double moveFraction, String version) {
         Random rng = new Random(77);
         List<Provision> original = base.provisions();

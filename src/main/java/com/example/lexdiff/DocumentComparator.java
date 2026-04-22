@@ -24,6 +24,7 @@ public class DocumentComparator {
     private final MyersDiffAlgorithm differ      = new MyersDiffAlgorithm();
     private final FingerprintMoveDetector mover  = new FingerprintMoveDetector();
 
+    // Matches provisions by label, diffs matched pairs, then resolves unmatched ones as moves/renames/adds/deletes.
     public AmendmentReport compare(LegalDocument a, LegalDocument b) {
         Map<String, Provision> byLabelA = indexByLabel(a.provisions());
         Map<String, Provision> byLabelB = indexByLabel(b.provisions());

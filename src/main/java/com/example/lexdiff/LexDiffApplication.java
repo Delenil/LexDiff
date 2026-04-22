@@ -55,14 +55,14 @@ public class LexDiffApplication implements CommandLineRunner {
                 ? new JsonReportRenderer()
                 : new TextReportRenderer();
 
-        // --- batch mode: --docs path1,path2,... --versions v1,v2,... ---
+        // batch mode
         String docsParam = params.get("docs");
         if (docsParam != null) {
             runBatch(docsParam, params, title, jurisdiction, profile, loader, parser, renderer, format);
             return;
         }
 
-        // --- single-pair mode: --doc-a ... --doc-b ... ---
+        // single-pair mode
         String docA      = params.get("doc-a");
         String docB      = params.get("doc-b");
         String versionA  = params.getOrDefault("version-a", "v1");

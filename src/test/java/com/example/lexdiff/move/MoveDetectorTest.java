@@ -87,6 +87,7 @@ class MoveDetectorTest {
         assertEquals(1, matches.size());
     }
 
+    // convenience builder for test provisions
     private Provision provision(String id, String label, String text) {
         return new Provision(id, label, NodeType.ARTICLE, text);
     }
